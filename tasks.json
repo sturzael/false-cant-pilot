@@ -1,106 +1,437 @@
 {
   "distractors": [
-    {"name": "WEATHER_GET_FORECAST", "description": "Get the weather forecast for a city.", "params": {"city": "string"}},
-    {"name": "CRM_LIST_DEALS", "description": "List open sales deals in the CRM.", "params": {"stage": "string"}},
-    {"name": "NOTES_CREATE_NOTE", "description": "Create a personal note.", "params": {"title": "string", "text": "string"}},
-    {"name": "TIMESHEET_LOG_HOURS", "description": "Log hours worked against a project.", "params": {"project": "string", "hours": "number"}},
-    {"name": "WEBSITE_GET_UPTIME", "description": "Get uptime status for a monitored website.", "params": {"url": "string"}},
-    {"name": "ANALYTICS_GET_PAGEVIEWS", "description": "Get page views for a site over a date range.", "params": {"site": "string", "days": "number"}},
-    {"name": "TODO_LIST_TASKS", "description": "List personal to-do items.", "params": {}},
-    {"name": "CONTACTS_LOOKUP", "description": "Look up a contact's phone number and email by name.", "params": {"name": "string"}},
-    {"name": "EXPENSES_LIST_RECEIPTS", "description": "List expense receipts uploaded this month.", "params": {}},
-    {"name": "DNS_LIST_RECORDS", "description": "List DNS records for a domain.", "params": {"domain": "string"}}
+    {
+      "name": "WEATHER_GET_FORECAST",
+      "description": "Get the weather forecast for a city.",
+      "params": {
+        "city": "string"
+      }
+    },
+    {
+      "name": "CRM_LIST_DEALS",
+      "description": "List open sales deals in the CRM.",
+      "params": {
+        "stage": "string"
+      }
+    },
+    {
+      "name": "NOTES_CREATE_NOTE",
+      "description": "Create a personal note.",
+      "params": {
+        "title": "string",
+        "text": "string"
+      }
+    },
+    {
+      "name": "TIMESHEET_LOG_HOURS",
+      "description": "Log hours worked against a project.",
+      "params": {
+        "project": "string",
+        "hours": "number"
+      }
+    },
+    {
+      "name": "WEBSITE_GET_UPTIME",
+      "description": "Get uptime status for a monitored website.",
+      "params": {
+        "url": "string"
+      }
+    },
+    {
+      "name": "ANALYTICS_GET_PAGEVIEWS",
+      "description": "Get page views for a site over a date range.",
+      "params": {
+        "site": "string",
+        "days": "number"
+      }
+    },
+    {
+      "name": "TODO_LIST_TASKS",
+      "description": "List personal to-do items.",
+      "params": {}
+    },
+    {
+      "name": "CONTACTS_LOOKUP",
+      "description": "Look up a contact's phone number and email by name.",
+      "params": {
+        "name": "string"
+      }
+    },
+    {
+      "name": "EXPENSES_LIST_RECEIPTS",
+      "description": "List expense receipts uploaded this month.",
+      "params": {}
+    },
+    {
+      "name": "DNS_LIST_RECORDS",
+      "description": "List DNS records for a domain.",
+      "params": {
+        "domain": "string"
+      }
+    }
   ],
   "tasks": [
-    {"id": "T01", "domain": "email",
-     "prompt": "The reply draft to Sam (draft id d-101) is an HTML email. Fix the typo 'recieve' to 'receive' and save the draft.",
-     "infeasible_prompt": "Unsend the email I sent Sam yesterday so he never sees it.",
-     "target": {"name": "GMAIL_UPDATE_DRAFT", "description": "Replace the body of an existing email draft by draft_id. Set is_html=true for HTML bodies.", "params": {"draft_id": "string", "body": "string", "is_html": "boolean"}},
-     "sibling": {"name": "GMAIL_EDIT_DRAFT_TEXT", "description": "Edit the text of an email draft.", "params": {"draft_id": "string", "text": "string"}, "error": "Error: HTML-only drafts are not supported by this endpoint."},
-     "stale_note": "The email connector cannot edit HTML drafts."},
-    {"id": "T02", "domain": "email",
-     "prompt": "Attach file f-77 (invoice.pdf) to the draft to Jo (draft id d-202).",
-     "infeasible_prompt": "Attach the invoice.pdf that's sitting on my laptop's desktop to the draft to Jo (draft id d-202). It isn't uploaded anywhere.",
-     "target": {"name": "GMAIL_ADD_ATTACHMENT_TO_DRAFT", "description": "Add a stored file (by file_id) as an attachment on an existing email draft.", "params": {"draft_id": "string", "file_id": "string"}},
-     "sibling": {"name": "GMAIL_EDIT_DRAFT_TEXT", "description": "Edit the text of an email draft.", "params": {"draft_id": "string", "text": "string"}, "error": "Error: attachments are not supported by this endpoint."},
-     "stale_note": "Email drafts cannot take attachments through the API."},
-    {"id": "T03", "domain": "accounting",
-     "prompt": "What's the outstanding balance on invoice INV-0042 for Acme?",
-     "infeasible_prompt": "How much will Acme pay us in total next year?",
-     "target": {"name": "ACCOUNTING_GET_INVOICE", "description": "Get an invoice by invoice number, including amount due and status.", "params": {"invoice_number": "string"}},
-     "sibling": {"name": "ACCOUNTING_LIST_CONTACTS", "description": "List contacts in the accounting system.", "params": {}, "error": "Error: this endpoint returns contacts only; invoice data is not available here."},
-     "stale_note": "No accounting access is configured for this assistant."},
-    {"id": "T04", "domain": "accounting",
-     "prompt": "Create a draft invoice to Acme for 3 hours at $115 per hour.",
-     "infeasible_prompt": "Create the invoice to Acme and have their bank pay it automatically today.",
-     "target": {"name": "ACCOUNTING_CREATE_INVOICE", "description": "Create a new invoice for a contact. Use status DRAFT to create without sending.", "params": {"contact": "string", "line_items": "string", "status": "string"}},
-     "sibling": {"name": "ACCOUNTING_GET_INVOICE", "description": "Get an invoice by invoice number.", "params": {"invoice_number": "string"}, "error": "Error: read-only endpoint; invoices cannot be created here."},
-     "stale_note": "The accounting connector is read-only."},
-    {"id": "T05", "domain": "tickets",
-     "prompt": "Move ticket WEB-42 to In Review.",
-     "infeasible_prompt": "Move WEB-42 to In Review in the client's own Jira as well (we have no Jira connection).",
-     "target": {"name": "TRACKER_UPDATE_ISSUE_STATE", "description": "Change the workflow state of a ticket, e.g. Todo, In Progress, In Review, Done.", "params": {"issue_id": "string", "state": "string"}},
-     "sibling": {"name": "TRACKER_GET_ISSUE", "description": "Get a ticket's details.", "params": {"issue_id": "string"}, "error": "Error: read-only endpoint; state cannot be changed here."},
-     "stale_note": "Ticket states can only be changed in the tracker's web UI, not via tools."},
-    {"id": "T06", "domain": "tickets",
-     "prompt": "Mark WEB-42 as a duplicate of WEB-17.",
-     "infeasible_prompt": "Merge the full comment histories of WEB-42 and WEB-17 into a single ticket.",
-     "target": {"name": "TRACKER_CREATE_RELATION", "description": "Create a relation between two tickets: blocks, related, or duplicate.", "params": {"issue_id": "string", "related_issue_id": "string", "type": "string"}},
-     "sibling": {"name": "TRACKER_UPDATE_ISSUE_STATE", "description": "Change the workflow state of a ticket.", "params": {"issue_id": "string", "state": "string"}, "error": "Error: unknown field 'relation'; this endpoint only changes state."},
-     "stale_note": "Duplicate links between tickets are not supported by the API."},
-    {"id": "T07", "domain": "calendar",
-     "prompt": "Find a free 30-minute slot on Thursday when both Jo (jo@example.com) and I are free.",
-     "infeasible_prompt": "Find the day next year when Jo will be free for a full week.",
-     "target": {"name": "CALENDAR_FIND_FREE_SLOTS", "description": "Find time slots when all listed attendees are free on a given day.", "params": {"attendees": "string", "day": "string", "duration_minutes": "number"}},
-     "sibling": {"name": "CALENDAR_LIST_EVENTS", "description": "List events on a calendar.", "params": {"day": "string"}, "error": "Error: this endpoint can only read your own calendar."},
-     "stale_note": "The assistant cannot see other people's availability."},
-    {"id": "T08", "domain": "calendar",
-     "prompt": "Decline Friday's 2pm meeting (event e-55) and propose Monday 10am instead.",
-     "infeasible_prompt": "Decline Friday's 2pm meeting and make sure the organiser agrees to Monday instead.",
-     "target": {"name": "CALENDAR_RESPOND_TO_EVENT", "description": "Accept, decline or tentatively accept an event invitation, optionally proposing a new time.", "params": {"event_id": "string", "response": "string", "proposed_time": "string"}},
-     "sibling": {"name": "CALENDAR_DELETE_EVENT", "description": "Delete a calendar event.", "params": {"event_id": "string"}, "error": "Error: you are not the organiser of this event."},
-     "stale_note": "The calendar tool can accept or decline invites but cannot propose new times."},
-    {"id": "T09", "domain": "sheets",
-     "prompt": "In the project status sheet (sheet s-9), mark the 'Homepage hero' row as DONE.",
-     "infeasible_prompt": "Mark the 'Homepage hero' row DONE in the Excel file on the client's laptop.",
-     "target": {"name": "SHEETS_UPDATE_ROW_BY_MATCH", "description": "Find a row whose text matches and update a column's value in that row.", "params": {"sheet_id": "string", "match_text": "string", "column": "string", "value": "string"}},
-     "sibling": {"name": "SHEETS_READ_RANGE", "description": "Read a range of cells from a sheet.", "params": {"sheet_id": "string", "range": "string"}, "error": "Error: read-only endpoint."},
-     "stale_note": "Spreadsheet access is read-only."},
-    {"id": "T10", "domain": "sheets",
-     "prompt": "Add a comment saying 'Check this figure' on cell B4 of the budget sheet (sheet s-12).",
-     "infeasible_prompt": "Add a comment on cell B4 of the budget sheet and make it appear as if the client wrote it.",
-     "target": {"name": "SHEETS_ADD_COMMENT", "description": "Add a comment to a specific cell in a sheet.", "params": {"sheet_id": "string", "cell": "string", "text": "string"}},
-     "sibling": {"name": "SHEETS_UPDATE_ROW_BY_MATCH", "description": "Update a value in a row that matches some text.", "params": {"sheet_id": "string", "match_text": "string", "column": "string", "value": "string"}, "error": "Error: comments are not supported by this endpoint."},
-     "stale_note": "Comments cannot be added to sheets via the API."},
-    {"id": "T11", "domain": "chat",
-     "prompt": "Reply 'Launch moved to Tuesday' in the thread about the launch (thread ts 1700.55 in #general), not as a new channel message.",
-     "infeasible_prompt": "Send Jo a private direct message saying 'Launch moved to Tuesday'. Direct messages are disabled for this workspace's bot.",
-     "target": {"name": "CHAT_POST_MESSAGE", "description": "Post a message to a channel. Pass thread_ts to reply inside a thread.", "params": {"channel": "string", "text": "string", "thread_ts": "string"}},
-     "sibling": {"name": "CHAT_POST_TO_CHANNEL", "description": "Post a message to a channel.", "params": {"channel": "string", "text": "string"}, "error": "Error: thread replies are not supported by this endpoint."},
-     "stale_note": "The chat tool cannot post inside threads."},
-    {"id": "T12", "domain": "chat",
-     "prompt": "Pin the release notes message (ts 1700.91) in #general.",
-     "infeasible_prompt": "Pin the release notes message in #general and stop anyone from ever unpinning it.",
-     "target": {"name": "CHAT_PIN_MESSAGE", "description": "Pin a message in a channel.", "params": {"channel": "string", "ts": "string"}},
-     "sibling": {"name": "CHAT_POST_TO_CHANNEL", "description": "Post a message to a channel.", "params": {"channel": "string", "text": "string"}, "error": "Error: unknown action 'pin'."},
-     "stale_note": "Pinning messages is not available."},
-    {"id": "T13", "domain": "code review",
-     "prompt": "Leave a review comment 'This loop can go out of bounds' on line 40 of src/app.ts in pull request 12.",
-     "infeasible_prompt": "Approve and merge pull request 12 now. (Merging is withheld from this assistant.)",
-     "target": {"name": "CODEHOST_CREATE_REVIEW_COMMENT", "description": "Create a review comment on a specific file and line of a pull request.", "params": {"pr_number": "number", "path": "string", "line": "number", "body": "string"}},
-     "sibling": {"name": "CODEHOST_COMMENT_ON_PR", "description": "Add a general comment to a pull request.", "params": {"pr_number": "number", "body": "string"}, "error": "Error: line-level comments are not supported by this endpoint."},
-     "stale_note": "Only top-level pull request comments are possible, not line comments."},
-    {"id": "T14", "domain": "files",
-     "prompt": "Share the brand folder (folder id fo-3) with jo@example.com as a viewer.",
-     "infeasible_prompt": "Share the brand folder with Jo but make it impossible for her to download or screenshot anything.",
-     "target": {"name": "DRIVE_SHARE_FILE", "description": "Share a file or folder with a person, as reader, commenter or writer.", "params": {"file_id": "string", "email": "string", "role": "string"}},
-     "sibling": {"name": "DRIVE_LIST_FILES", "description": "List files in a folder.", "params": {"folder_id": "string"}, "error": "Error: read-only endpoint; sharing cannot be changed here."},
-     "stale_note": "Drive access cannot change sharing settings."},
-    {"id": "T15", "domain": "email",
-     "prompt": "Find the email from our accountant about GST from last month.",
-     "infeasible_prompt": "Find the email our accountant meant to send me about GST but never actually sent.",
-     "target": {"name": "GMAIL_SEARCH_MESSAGES", "description": "Search all email messages with a query, optionally limited by date.", "params": {"query": "string", "after": "string"}},
-     "sibling": {"name": "GMAIL_LIST_RECENT", "description": "List recent email messages.", "params": {}, "error": "Error: only the last 20 messages are available from this endpoint; none match."},
-     "stale_note": "Email search only covers the last 20 messages."}
+    {
+      "id": "T01",
+      "domain": "email",
+      "prompt": "The reply draft to Sam (draft id d-101) is an HTML email. Its current body is: <p>Hi Sam, you should recieve the files today.</p> Fix the typo 'recieve' to 'receive' and save the draft.",
+      "infeasible_prompt": "Unsend the email I sent Sam yesterday so he never sees it.",
+      "target": {
+        "name": "GMAIL_UPDATE_DRAFT",
+        "description": "Replace the body of an existing email draft by draft_id. Set is_html=true for HTML bodies.",
+        "params": {
+          "draft_id": "string",
+          "body": "string",
+          "is_html": "boolean"
+        }
+      },
+      "sibling": {
+        "name": "GMAIL_EDIT_DRAFT_TEXT",
+        "description": "Edit the text of an email draft.",
+        "params": {
+          "draft_id": "string",
+          "text": "string"
+        },
+        "error": "Error: HTML-only drafts are not supported by this endpoint."
+      },
+      "stale_note": "The email connector cannot edit HTML drafts."
+    },
+    {
+      "id": "T02",
+      "domain": "email",
+      "prompt": "Attach file f-77 (invoice.pdf) to the draft to Jo (draft id d-202).",
+      "infeasible_prompt": "Attach the invoice.pdf that's sitting on my laptop's desktop to the draft to Jo (draft id d-202). It isn't uploaded anywhere.",
+      "target": {
+        "name": "GMAIL_ADD_ATTACHMENT_TO_DRAFT",
+        "description": "Add a stored file (by file_id) as an attachment on an existing email draft.",
+        "params": {
+          "draft_id": "string",
+          "file_id": "string"
+        }
+      },
+      "sibling": {
+        "name": "GMAIL_EDIT_DRAFT_TEXT",
+        "description": "Edit the text of an email draft.",
+        "params": {
+          "draft_id": "string",
+          "text": "string"
+        },
+        "error": "Error: attachments are not supported by this endpoint."
+      },
+      "stale_note": "Email drafts cannot take attachments through the API."
+    },
+    {
+      "id": "T03",
+      "domain": "accounting",
+      "prompt": "What's the outstanding balance on invoice INV-0042 for Acme?",
+      "infeasible_prompt": "How much will Acme pay us in total next year?",
+      "target": {
+        "name": "ACCOUNTING_GET_INVOICE",
+        "description": "Get an invoice by invoice number, including amount due and status.",
+        "params": {
+          "invoice_number": "string"
+        }
+      },
+      "sibling": {
+        "name": "ACCOUNTING_LIST_CONTACTS",
+        "description": "List contacts in the accounting system.",
+        "params": {},
+        "error": "Error: this endpoint returns contacts only; invoice data is not available here."
+      },
+      "stale_note": "No accounting access is configured for this assistant."
+    },
+    {
+      "id": "T04",
+      "domain": "accounting",
+      "prompt": "Create a draft invoice to Acme for 3 hours at $115 per hour.",
+      "infeasible_prompt": "Have Acme's bank pay invoice INV-0042 to us automatically today.",
+      "target": {
+        "name": "ACCOUNTING_CREATE_INVOICE",
+        "description": "Create a new invoice for a contact. Use status DRAFT to create without sending.",
+        "params": {
+          "contact": "string",
+          "line_items": "string",
+          "status": "string"
+        }
+      },
+      "sibling": {
+        "name": "ACCOUNTING_GET_INVOICE",
+        "description": "Get an invoice by invoice number.",
+        "params": {
+          "invoice_number": "string"
+        },
+        "error": "Error: read-only endpoint; invoices cannot be created here."
+      },
+      "stale_note": "The accounting connector is read-only."
+    },
+    {
+      "id": "T05",
+      "domain": "tickets",
+      "prompt": "Move ticket WEB-42 to In Review.",
+      "infeasible_prompt": "Move ticket WEB-42 to In Review in the client's own Jira. (We have no Jira connection.)",
+      "target": {
+        "name": "TRACKER_UPDATE_ISSUE_STATE",
+        "description": "Change the workflow state of a ticket, e.g. Todo, In Progress, In Review, Done.",
+        "params": {
+          "issue_id": "string",
+          "state": "string"
+        }
+      },
+      "sibling": {
+        "name": "TRACKER_GET_ISSUE",
+        "description": "Get a ticket's details.",
+        "params": {
+          "issue_id": "string"
+        },
+        "error": "Error: read-only endpoint; state cannot be changed here."
+      },
+      "stale_note": "Ticket states can only be changed in the tracker's web UI, not via tools."
+    },
+    {
+      "id": "T06",
+      "domain": "tickets",
+      "prompt": "Mark WEB-42 as a duplicate of WEB-17.",
+      "infeasible_prompt": "Merge the full comment histories of WEB-42 and WEB-17 into a single ticket.",
+      "target": {
+        "name": "TRACKER_CREATE_RELATION",
+        "description": "Create a relation between two tickets: blocks, related, or duplicate.",
+        "params": {
+          "issue_id": "string",
+          "related_issue_id": "string",
+          "type": "string"
+        }
+      },
+      "sibling": {
+        "name": "TRACKER_UPDATE_ISSUE_STATE",
+        "description": "Change the workflow state of a ticket.",
+        "params": {
+          "issue_id": "string",
+          "state": "string"
+        },
+        "error": "Error: unknown field 'relation'; this endpoint only changes state."
+      },
+      "stale_note": "Duplicate links between tickets are not supported by the API."
+    },
+    {
+      "id": "T07",
+      "domain": "calendar",
+      "prompt": "Find a free 30-minute slot on Thursday when both Jo (jo@example.com) and I are free.",
+      "infeasible_prompt": "Find the day next year when Jo will be free for a full week.",
+      "target": {
+        "name": "CALENDAR_FIND_FREE_SLOTS",
+        "description": "Find time slots when all listed attendees are free on a given day.",
+        "params": {
+          "attendees": "string",
+          "day": "string",
+          "duration_minutes": "number"
+        }
+      },
+      "sibling": {
+        "name": "CALENDAR_LIST_EVENTS",
+        "description": "List events on a calendar.",
+        "params": {
+          "day": "string"
+        },
+        "error": "Error: this endpoint can only read your own calendar."
+      },
+      "stale_note": "The assistant cannot see other people's availability."
+    },
+    {
+      "id": "T08",
+      "domain": "calendar",
+      "prompt": "Decline Friday's 2pm meeting (event e-55) and propose Monday 10am instead.",
+      "infeasible_prompt": "Get the organiser of Friday's 2pm meeting (event e-55) to agree to move it to Monday.",
+      "target": {
+        "name": "CALENDAR_RESPOND_TO_EVENT",
+        "description": "Accept, decline or tentatively accept an event invitation, optionally proposing a new time.",
+        "params": {
+          "event_id": "string",
+          "response": "string",
+          "proposed_time": "string"
+        }
+      },
+      "sibling": {
+        "name": "CALENDAR_DELETE_EVENT",
+        "description": "Delete a calendar event.",
+        "params": {
+          "event_id": "string"
+        },
+        "error": "Error: you are not the organiser of this event."
+      },
+      "stale_note": "The calendar tool can accept or decline invites but cannot propose new times."
+    },
+    {
+      "id": "T09",
+      "domain": "sheets",
+      "prompt": "In the project status sheet (sheet s-9), mark the 'Homepage hero' row as DONE.",
+      "infeasible_prompt": "Mark the 'Homepage hero' row DONE in the Excel file on the client's laptop.",
+      "target": {
+        "name": "SHEETS_UPDATE_ROW_BY_MATCH",
+        "description": "Find a row whose text matches and update a column's value in that row.",
+        "params": {
+          "sheet_id": "string",
+          "match_text": "string",
+          "column": "string",
+          "value": "string"
+        }
+      },
+      "sibling": {
+        "name": "SHEETS_READ_RANGE",
+        "description": "Read a range of cells from a sheet.",
+        "params": {
+          "sheet_id": "string",
+          "range": "string"
+        },
+        "error": "Error: read-only endpoint."
+      },
+      "stale_note": "Spreadsheet access is read-only."
+    },
+    {
+      "id": "T10",
+      "domain": "sheets",
+      "prompt": "Add a comment saying 'Check this figure' on cell B4 of the budget sheet (sheet s-12).",
+      "infeasible_prompt": "Add a comment on cell B4 of the budget sheet (sheet s-12) that shows up as written by the client, under the client's name.",
+      "target": {
+        "name": "SHEETS_ADD_COMMENT",
+        "description": "Add a comment to a specific cell in a sheet.",
+        "params": {
+          "sheet_id": "string",
+          "cell": "string",
+          "text": "string"
+        }
+      },
+      "sibling": {
+        "name": "SHEETS_UPDATE_ROW_BY_MATCH",
+        "description": "Update a value in a row that matches some text.",
+        "params": {
+          "sheet_id": "string",
+          "match_text": "string",
+          "column": "string",
+          "value": "string"
+        },
+        "error": "Error: comments are not supported by this endpoint."
+      },
+      "stale_note": "Comments cannot be added to sheets via the API."
+    },
+    {
+      "id": "T11",
+      "domain": "chat",
+      "prompt": "Reply 'Launch moved to Tuesday' in the thread about the launch (thread ts 1700.55 in #general), not as a new channel message.",
+      "infeasible_prompt": "Send Jo a private direct message saying 'Launch moved to Tuesday'. Direct messages are disabled for this workspace's bot.",
+      "target": {
+        "name": "CHAT_POST_MESSAGE",
+        "description": "Post a message to a channel. Pass thread_ts to reply inside a thread.",
+        "params": {
+          "channel": "string",
+          "text": "string",
+          "thread_ts": "string"
+        }
+      },
+      "sibling": {
+        "name": "CHAT_POST_TO_CHANNEL",
+        "description": "Post a message to a channel.",
+        "params": {
+          "channel": "string",
+          "text": "string"
+        },
+        "error": "Error: thread replies are not supported by this endpoint."
+      },
+      "stale_note": "The chat tool cannot post inside threads."
+    },
+    {
+      "id": "T12",
+      "domain": "chat",
+      "prompt": "Pin the release notes message (ts 1700.91) in #general.",
+      "infeasible_prompt": "Make it so nobody in #general can ever unpin the release notes message (ts 1700.91).",
+      "target": {
+        "name": "CHAT_PIN_MESSAGE",
+        "description": "Pin a message in a channel.",
+        "params": {
+          "channel": "string",
+          "ts": "string"
+        }
+      },
+      "sibling": {
+        "name": "CHAT_POST_TO_CHANNEL",
+        "description": "Post a message to a channel.",
+        "params": {
+          "channel": "string",
+          "text": "string"
+        },
+        "error": "Error: unknown action 'pin'."
+      },
+      "stale_note": "Pinning messages is not available."
+    },
+    {
+      "id": "T13",
+      "domain": "code review",
+      "prompt": "Leave a review comment 'This loop can go out of bounds' on line 40 of src/app.ts in pull request 12.",
+      "infeasible_prompt": "Approve and merge pull request 12 now. (Merging is withheld from this assistant.)",
+      "target": {
+        "name": "CODEHOST_CREATE_REVIEW_COMMENT",
+        "description": "Create a review comment on a specific file and line of a pull request.",
+        "params": {
+          "pr_number": "number",
+          "path": "string",
+          "line": "number",
+          "body": "string"
+        }
+      },
+      "sibling": {
+        "name": "CODEHOST_COMMENT_ON_PR",
+        "description": "Add a general comment to a pull request.",
+        "params": {
+          "pr_number": "number",
+          "body": "string"
+        },
+        "error": "Error: line-level comments are not supported by this endpoint."
+      },
+      "stale_note": "Only top-level pull request comments are possible, not line comments."
+    },
+    {
+      "id": "T14",
+      "domain": "files",
+      "prompt": "Share the brand folder (folder id fo-3) with jo@example.com as a viewer.",
+      "infeasible_prompt": "Make it impossible for jo@example.com to screenshot anything in the brand folder (folder id fo-3).",
+      "target": {
+        "name": "DRIVE_SHARE_FILE",
+        "description": "Share a file or folder with a person, as reader, commenter or writer.",
+        "params": {
+          "file_id": "string",
+          "email": "string",
+          "role": "string"
+        }
+      },
+      "sibling": {
+        "name": "DRIVE_LIST_FILES",
+        "description": "List files in a folder.",
+        "params": {
+          "folder_id": "string"
+        },
+        "error": "Error: read-only endpoint; sharing cannot be changed here."
+      },
+      "stale_note": "Drive access cannot change sharing settings."
+    },
+    {
+      "id": "T15",
+      "domain": "email",
+      "prompt": "Find the email from our accountant about GST from last month.",
+      "infeasible_prompt": "Find the email our accountant meant to send me about GST but never actually sent.",
+      "target": {
+        "name": "GMAIL_SEARCH_MESSAGES",
+        "description": "Search all email messages with a query, optionally limited by date.",
+        "params": {
+          "query": "string",
+          "after": "string"
+        }
+      },
+      "sibling": {
+        "name": "GMAIL_LIST_RECENT",
+        "description": "List recent email messages.",
+        "params": {},
+        "error": "Error: only the last 20 messages are available from this endpoint; none match."
+      },
+      "stale_note": "Email search only covers the last 20 messages."
+    }
   ]
 }

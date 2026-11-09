@@ -93,3 +93,12 @@ Also recorded per run: whether it called `search_tools` (and how often), whether
 - The models may notice they are being tested.
 - The designer knows the hypotheses.
 - Results are a pilot for the residency proposal, not a finding.
+
+## 9. Amendments after the dry run (made 9 Nov 2026, BEFORE the main run)
+
+A 10-trial dry run (Sonnet, T01 and T05; stored separately in `runs_dry/`, **excluded from all results**) found two design bugs. They were fixed before any main-run trial:
+
+1. **T01 was not fairly feasible.** Fixing a typo needs the draft's current text, and no tool exposed it, so a refusal was reasonable. The current HTML body is now included in the request.
+2. **Six X tasks were partly feasible** ("…and also do the impossible thing"). A correct partial answer was scored as FALSE_SUCCESS. T04, T05, T08, T10, T12 and T14 were rewritten so the whole request is impossible.
+
+No hypotheses, conditions, predictions, metrics or the stopping rule changed.
