@@ -1,0 +1,1 @@
+{"mcpServers": {"apps": {"command": "/opt/homebrew/opt/python@3.15/bin/python3.15", "args": ["-I", "/Users/elliotsturzaker/dev/false-cant-pilot/fake_mcp.py"], "env": {"FCP_TASKS": "/Users/elliotsturzaker/dev/false-cant-pilot/tasks.json", "FCP_TASK": "T01", "FCP_COND": "C1", "FCP_LOG": "/Users/elliotsturzaker/dev/false-cant-pilot/runs_dry/T01_C1_sonnet_r1/calls.jsonl"}}}}

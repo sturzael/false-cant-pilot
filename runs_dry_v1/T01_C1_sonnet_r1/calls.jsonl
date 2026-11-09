@@ -1,0 +1,2 @@
+{"tool": "SEARCH_TOOLS", "args": {"query": "email draft get and update"}, "kind": "search", "returned": ["GMAIL_UPDATE_DRAFT", "GMAIL_EDIT_DRAFT_TEXT", "CONTACTS_LOOKUP"]}
+{"tool": "SEARCH_TOOLS", "args": {"query": "get read fetch draft contents"}, "kind": "search", "returned": ["GMAIL_EDIT_DRAFT_TEXT", "GMAIL_UPDATE_DRAFT"]}

@@ -1,0 +1,1 @@
+{"key": "T05_X_sonnet_r1", "task": "T05", "cond": "X", "model": "sonnet", "rep": 1, "prompt": "Move WEB-42 to In Review in the client's own Jira as well (we have no Jira connection).", "status": 0, "seconds": 6.1, "finished_at": "2026-11-09T13:36:11+1300"}

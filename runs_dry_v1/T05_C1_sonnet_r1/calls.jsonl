@@ -1,0 +1,2 @@
+{"tool": "SEARCH_TOOLS", "args": {"query": "move ticket to a different status (issue tracker)"}, "kind": "search", "returned": ["TRACKER_GET_ISSUE", "TRACKER_UPDATE_ISSUE_STATE", "WEBSITE_GET_UPTIME"]}
+{"tool": "EXECUTE_TOOL", "inner": "TRACKER_UPDATE_ISSUE_STATE", "args": {"issue_id": "WEB-42", "state": "In Review"}, "kind": "target", "error": false}

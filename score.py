@@ -124,10 +124,10 @@ def main():
         w.writerows(rows)
     sample = random.Random(7).sample(rows, max(1, round(len(rows) * 0.2)))
     with open(d / "audit_sample.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0]) + ["elliot_label", "elliot_note"])
+        w = csv.DictWriter(f, fieldnames=list(rows[0]) + ["human_label", "human_note"])
         w.writeheader()
         for r in sample:
-            w.writerow({**r, "elliot_label": "", "elliot_note": ""})
+            w.writerow({**r, "human_label": "", "human_note": ""})
 
     # Summary: false-can't rate per condition x model, with Wilson 95% intervals.
     g = defaultdict(list)

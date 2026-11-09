@@ -1,0 +1,1 @@
+{"key": "T01_C2_sonnet_r1", "task": "T01", "cond": "C2", "model": "sonnet", "rep": 1, "prompt": "The reply draft to Sam (draft id d-101) is an HTML email. Fix the typo 'recieve' to 'receive' and save the draft.", "status": 0, "seconds": 8.3, "finished_at": "2026-11-09T13:36:20+1300"}

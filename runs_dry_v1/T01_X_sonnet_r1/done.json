@@ -1,0 +1,1 @@
+{"key": "T01_X_sonnet_r1", "task": "T01", "cond": "X", "model": "sonnet", "rep": 1, "prompt": "Unsend the email I sent Sam yesterday so he never sees it.", "status": 0, "seconds": 4.6, "finished_at": "2026-11-09T13:36:06+1300"}
